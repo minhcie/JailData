@@ -149,8 +149,8 @@ public class DbClient {
         }
     }
 
-    public static DbClient findByNameDob(Connection conn, long organizationId,
-                                         String firstName, String lastName, Date dob) {
+    public static DbClient findByNameDob(Connection conn, String firstName,
+                                         String lastName, Date dob) {
         DbClient client = null;
         try {
             if (dob != null) {
@@ -161,8 +161,7 @@ public class DbClient {
                 sb.append("lastName, suffix, dob, ssn, caseNumber, etoEnterpriseId, ");
                 sb.append("etoParticipantSiteId, etoSubjectId ");
                 sb.append("FROM client ");
-                sb.append("WHERE organizationId = " + organizationId);
-                sb.append("  AND firstName = '" + SqlString.encode(firstName) + "' ");
+                sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
                 sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
                 sb.append("  AND dob = '" + sdf.format(dob) + "'");
 
@@ -194,96 +193,6 @@ public class DbClient {
         }
         catch (Exception e) {
              log.error("Exception in DbClient.findByNameDob(): " + e);
-        }
-        return client;
-    }
-
-    public static DbClient findByNameSsn(Connection conn, long organizationId,
-                                         String firstName, String lastName, String ssn) {
-        DbClient client = null;
-        try {
-            if (ssn != null && ssn.length() > 0) {
-                StringBuffer sb = new StringBuffer();
-                sb.append("SELECT id, organizationId, genderId, firstName, middleName, ");
-                sb.append("lastName, suffix, dob, ssn, caseNumber, etoEnterpriseId, ");
-                sb.append("etoParticipantSiteId, etoSubjectId ");
-                sb.append("FROM client ");
-                sb.append("WHERE organizationId = " + organizationId);
-                sb.append("  AND firstName = '" + SqlString.encode(firstName) + "' ");
-                sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
-                sb.append("  AND ssn = '" + SqlString.encode(ssn) + "'");
-
-                Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery(sb.toString());
-                if (rs.next()) {
-                    client = new DbClient();
-                    client.id = rs.getLong("id");
-                    client.organizationId = rs.getLong("organizationId");
-                    client.genderId = rs.getLong("genderId");
-                    client.firstName = rs.getString("firstName");
-                    client.middleName = rs.getString("middleName");
-                    client.lastName = rs.getString("lastName");
-                    client.suffix = rs.getString("suffix");
-                    client.dob = rs.getDate("dob");
-                    client.ssn = rs.getString("ssn");
-                    client.caseNumber = rs.getString("caseNumber");
-                    client.etoEnterpriseId = (UUID)rs.getObject("etoEnterpriseId");
-                    client.etoParticipantSiteId = rs.getLong("etoParticipantSiteId");
-                    client.etoSubjectId = rs.getLong("etoSubjectId");
-                }
-
-                rs.close();
-                statement.close();
-            }
-        }
-        catch (SQLException sqle) {
-             log.error("SQLException in DbClient.findByNameSsn(): " + sqle);
-        }
-        catch (Exception e) {
-             log.error("Exception in DbClient.findByNameSsn(): " + e);
-        }
-        return client;
-    }
-
-    public static DbClient findByCaseNumber(Connection conn, long organizationId,
-                                            String caseNumber) {
-        DbClient client = null;
-        try {
-            StringBuffer sb = new StringBuffer();
-            sb.append("SELECT id, organizationId, genderId, firstName, middleName, ");
-            sb.append("lastName, suffix, dob, ssn, caseNumber, etoEnterpriseId, ");
-            sb.append("etoParticipantSiteId, etoSubjectId ");
-            sb.append("FROM client ");
-            sb.append("WHERE organizationId = " + organizationId);
-            sb.append("  AND caseNumber = '" + SqlString.encode(caseNumber) + "'");
-
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(sb.toString());
-            if (rs.next()) {
-                client = new DbClient();
-                client.id = rs.getLong("id");
-                client.organizationId = rs.getLong("organizationId");
-                client.genderId = rs.getLong("genderId");
-                client.firstName = rs.getString("firstName");
-                client.middleName = rs.getString("middleName");
-                client.lastName = rs.getString("lastName");
-                client.suffix = rs.getString("suffix");
-                client.dob = rs.getDate("dob");
-                client.ssn = rs.getString("ssn");
-                client.caseNumber = rs.getString("caseNumber");
-                client.etoEnterpriseId = (UUID)rs.getObject("etoEnterpriseId");
-                client.etoParticipantSiteId = rs.getLong("etoParticipantSiteId");
-                client.etoSubjectId = rs.getLong("etoSubjectId");
-            }
-
-            rs.close();
-            statement.close();
-        }
-        catch (SQLException sqle) {
-             log.error("SQLException in DbClient.findByCaseNumber(): " + sqle);
-        }
-        catch (Exception e) {
-             log.error("Exception in DbClient.findByCaseNumber(): " + e);
         }
         return client;
     }

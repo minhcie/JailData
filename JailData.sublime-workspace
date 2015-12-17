@@ -4,6 +4,46 @@
 		"selected_items":
 		[
 			[
+				"arr",
+				"arrestee"
+			],
+			[
+				"charge",
+				"chargeNum"
+			],
+			[
+				"prev",
+				"prevLastName"
+			],
+			[
+				"first",
+				"firstName"
+			],
+			[
+				"fir",
+				"firstNameIndex"
+			],
+			[
+				"fist",
+				"firstNameIndex"
+			],
+			[
+				"Arr",
+				"Arrestee"
+			],
+			[
+				"print",
+				"println"
+			],
+			[
+				"getT",
+				"getTextForRegion"
+			],
+			[
+				"R",
+				"RandomAccessBufferedFileInputStream"
+			],
+			[
 				"fu",
 				"function"
 			],
@@ -324,10 +364,6 @@
 				"setPassword(String value)"
 			],
 			[
-				"R",
-				"RunQueryAsAService"
-			],
-			[
 				"ques",
 				"question_option"
 			],
@@ -406,31 +442,40 @@
 			[
 				"close",
 				"closeConnection"
-			],
-			[
-				"print",
-				"printStackTrace"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "build/build.xml",
+			"file": "com/cie/ArrestData.java",
 			"settings":
 			{
-				"buffer_size": 1086,
-				"line_ending": "Windows"
+				"buffer_size": 302,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "package com.cie;\n\nimport java.io.File;\nimport java.io.IOException;\nimport java.sql.Connection;\nimport java.util.Set;\n\nimport com.lowagie.text.pdf.AcroFields;\nimport com.lowagie.text.pdf.PdfReader;\nimport com.lowagie.text.pdf.parser.PdfTextExtractor;\n\nimport org.apache.log4j.Logger;\n\npublic class JailData {\n\n    private static final Logger log = Logger.getLogger(JailData.class.getName());\n\n    public static void main(String[] args) {\n        Connection conn = null;\n\n        try {\n            conn = DbUtils.getDBConnection();\n            if (conn == null) {\n                System.exit(-1);\n            }\n\n            log.info(\"Reading document...\\n\");\n            String fileName = \"../Arrests.pdf\";\n            File f = new File(fileName);\n            if (!f.exists()) {\n                log.error(\"File not found!\");\n                System.exit(-1);\n            }\n\n            parseJailData(fileName);\n        }\n        catch (IOException ioe) {\n            log.error(ioe.getMessage());\n            ioe.printStackTrace();\n        }\n        catch (Exception e) {\n            log.error(e.getMessage());\n            e.printStackTrace();\n        }\n        finally {\n            DbUtils.closeConnection(conn);\n        }\n    }\n\n    private static void parseJailData(String fileName) throws Exception {\n        // Parse pdf document.\n        PdfReader reader = new PdfReader(fileName);\n        int pages = reader.getNumberOfPages(); \n        log.info(\"PDF has \" + pages + \" pages.\");\n        PdfTextExtractor extractor = new PdfTextExtractor(reader);\n        for (int i = 1; i <= pages; i++) {\n            ITextExtractionStrategy its = new iTextSharp.text.pdf.parser.SimpleTextExtractionStrategy();\n            String content = extractor.getTextFromPage(i);\n            log.info(\"Page \" + i + \" content:\\n\" + content + \"\\n\");\n        }\n\n        AcroFields form = reader.getAcroFields();\n        if (form != null) {\n            Set<String> fields = form.getFields().keySet();\n            log.info(\"Fields: \" + fields.size());\n            for (String key : fields) {\n                log.info(key + \"\\n\");\n            }\n        }\n        reader.close();\n    }\n}\n",
-			"file": "com/cie/JailData.java",
-			"file_size": 2053,
-			"file_write_time": 1449850765000000,
+			"file": "com/cie/Arrestee.java",
 			"settings":
 			{
-				"buffer_size": 2158,
+				"buffer_size": 342,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "com/cie/OffenseCode.java",
+			"settings":
+			{
+				"buffer_size": 123,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "com/cie/JailData.java",
+			"settings":
+			{
+				"buffer_size": 8021,
 				"line_ending": "Unix"
 			}
 		}
@@ -487,9 +532,11 @@
 	},
 	"file_history":
 	[
-		"/Users/minh/Source/CIE-Data/JailData/build/manifest.mf",
+		"/Users/minh/Source/CIE-Data/JailData/.git/MERGE_MSG",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/ArrestInfo.java",
 		"/Users/minh/Source/CIE-Data/JailData/log4j.properties",
 		"/Users/minh/Source/CIE-Data/JailData/build/build.xml",
+		"/Users/minh/Source/CIE-Data/JailData/build/manifest.mf",
 		"/Users/minh/Source/CIE-Data/consent/com/cie/consent.java",
 		"/Users/minh/source/etorest/SSOAuthentication/com/cie/SSOAuthentication.java",
 		"/Users/minh/source/OCR/manifest.mf",
@@ -612,9 +659,7 @@
 		"/Users/minh/Source/CIEAdmin/public/javascripts/select2.min.js",
 		"/Users/minh/Source/CIEDashboard/app/views/Users/show.html",
 		"/Users/minh/Downloads/AdminLTE-2.1.1/plugins/datatables/jquery.dataTables.css",
-		"/Users/minh/Source/CIEAdmin/public/stylesheets/dataTables.bootstrap.css",
-		"/Users/minh/Source/CIEAdmin/app/controllers/BaseController.java",
-		"/Users/minh/Source/CIEDashboard/app/views/tags/sidebar.html"
+		"/Users/minh/Source/CIEAdmin/public/stylesheets/dataTables.bootstrap.css"
 	],
 	"find":
 	{
@@ -633,6 +678,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"prevLastName",
+			"substring",
+			"firstPage",
+			"Set",
+			"its",
 			"List",
 			"Date",
 			"Calendar",
@@ -755,12 +805,7 @@
 			"prgmType",
 			"prgmTypeId",
 			"ProgramTypes",
-			"savePrgmType",
-			"prgmTypeDlg",
-			"roleName",
-			"@Users",
-			"Role",
-			"findAllActive"
+			"savePrgmType"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -778,30 +823,80 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "build/build.xml",
+					"file": "com/cie/ArrestData.java",
 					"settings":
 					{
-						"buffer_size": 1086,
+						"buffer_size": 302,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								297,
-								297
+								40,
+								40
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/XML/XML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "com/cie/Arrestee.java",
+					"settings":
+					{
+						"buffer_size": 342,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								333,
+								333
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "com/cie/OffenseCode.java",
+					"settings":
+					{
+						"buffer_size": 123,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -816,19 +911,19 @@
 			"sheets":
 			[
 				{
-					"buffer": 1,
+					"buffer": 3,
 					"file": "com/cie/JailData.java",
 					"settings":
 					{
-						"buffer_size": 2158,
+						"buffer_size": 8021,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1809,
+								1809
 							]
 						],
 						"settings":
@@ -838,7 +933,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1478.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -903,16 +998,16 @@
 		"selected_items":
 		[
 			[
+				"log",
+				"log4j.properties"
+			],
+			[
 				"mani",
 				"build/manifest.mf"
 			],
 			[
 				"build",
 				"build/build.xml"
-			],
-			[
-				"log",
-				"log4j.properties"
 			],
 			[
 				"jail",
@@ -1424,7 +1519,7 @@
 		[
 			[
 				"",
-				"/Users/minh/Source/EtoREST/SSOAuthentication/SSOAuthentication.sublime-project"
+				"/Users/minh/Source/ETLDashboard/ETLDashboard.sublime-project"
 			]
 		],
 		"width": 380.0

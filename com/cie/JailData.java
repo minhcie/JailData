@@ -49,10 +49,10 @@ public class JailData {
             stripper.addRegion("header", header);
             stripper.addRegion("content", content);
 
-            //int pages = document.getNumberOfPages();
-            //for (int n = 1; n < pages; n++) { // Ignore first page.
-            //    System.out.println("Page " + n + "\n");
-                PDPage page = document.getPage(3);
+            int pages = document.getNumberOfPages();
+            for (int n = 1; n < pages; n++) { // Ignore first page.
+                System.out.println("\nPage " + n + "\n");
+                PDPage page = document.getPage(n);
                 stripper.extractRegions(page);
 
                 // Parse arrest data.
@@ -132,11 +132,11 @@ public class JailData {
                     }
 
                     // Parse charge info.
-                    if (!s.contains("250000FA_MEDIA") &&
-                        !s.contains("San Diego County") &&
+                    if (!s.contains("San Diego County") &&
                         !s.contains("Arresting Agency") &&
                         !s.contains("Last Name") &&
-                        !s.contains("Arrnum Chgnum Code Section")) {
+                        !s.contains("Arrnum Chgnum Code Section") &&
+                        !s.contains("RJuInM")) { // Shield logo.
                         if (arrestee != null && charge != null) {
                             System.out.println(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                             arrestee.charges.add(charge);
@@ -172,8 +172,7 @@ public class JailData {
                 if (data != null && arrestee != null) {
                     data.arrestees.add(arrestee);
                 }
-                System.out.println();
-            //}
+            }
 
             // Close document.
             document.close();
