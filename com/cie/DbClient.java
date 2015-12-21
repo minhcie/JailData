@@ -161,9 +161,27 @@ public class DbClient {
                 sb.append("lastName, suffix, dob, ssn, caseNumber, etoEnterpriseId, ");
                 sb.append("etoParticipantSiteId, etoSubjectId ");
                 sb.append("FROM client ");
-                sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
-                sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
-                sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                if (firstName != null && lastName != null && dob != null) {
+                    sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
+                    sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
+                    sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                }
+                else if (lastName != null && dob != null) {
+                    sb.append("WHERE lastName = '" + SqlString.encode(lastName) + "' ");
+                    sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                }
+                else if (firstName != null && dob != null) {
+                    sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
+                    sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                }
+                else if (firstName != null && lastName != null) {
+                    sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
+                    sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
+                }
+                else {
+                    log.error("DbClient.findByNameDob() - Trying to find client with null names and dob.");
+                    return null;
+                }
 
                 Statement statement = conn.createStatement();
                 ResultSet rs = statement.executeQuery(sb.toString());
@@ -189,10 +207,10 @@ public class DbClient {
             }
         }
         catch (SQLException sqle) {
-             log.error("SQLException in DbClient.findByNameDob(): " + sqle);
+            log.error("SQLException in DbClient.findByNameDob(): " + sqle);
         }
         catch (Exception e) {
-             log.error("Exception in DbClient.findByNameDob(): " + e);
+            log.error("Exception in DbClient.findByNameDob(): " + e);
         }
         return client;
     }

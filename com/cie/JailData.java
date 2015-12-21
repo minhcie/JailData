@@ -51,7 +51,7 @@ public class JailData {
 
             int pages = document.getNumberOfPages();
             for (int n = 1; n < pages; n++) { // Ignore first page.
-                System.out.println("\nPage " + n + "\n");
+                log.info("\nPage " + n + "\n");
                 PDPage page = document.getPage(n);
                 stripper.extractRegions(page);
 
@@ -62,7 +62,7 @@ public class JailData {
 
                 String text = stripper.getTextForRegion("header");
                 String[] lines = text.split("[\r\n]+");
-                //System.out.println("Text in the header area: " + header + "\n");
+                //log.info("Text in the header area: " + header + "\n");
                 for (int i = 0; i < lines.length; i++) {
                     String s = lines[i];
 
@@ -72,26 +72,26 @@ public class JailData {
                     }
 
                     // @debug.
-                    //System.out.println(s);
+                    //log.info(s);
 
                     int k = s.indexOf("Effective Date:");
                     if (k >= 0) {
                         String temp = s.substring(k+15).trim();
                         if (temp != null && temp.length() > 0) {
                             data.effectiveDate = sdf.parse(temp);
-                            System.out.println("Effective Date: " + temp);
+                            log.info("Effective Date: " + temp);
                         }
                     }
                     if (i == 5) {
                         data.arrestingAgency = s.trim();
-                        System.out.println("Arresting Agency: " + data.arrestingAgency);
+                        log.info("Arresting Agency: " + data.arrestingAgency);
                     }
                 }
-                System.out.println();
+                log.info("\n");
 
                 text = stripper.getTextForRegion("content");
                 lines = text.split("[\r\n]+");
-                //System.out.println("Text in the content area: " + content);
+                //log.info("Text in the content area: " + content);
                 for (int i = 0; i < lines.length; i++) {
                     String s = lines[i].trim();
 
@@ -101,7 +101,7 @@ public class JailData {
                     }
 
                     // @debug.
-                    //System.out.println(s);
+                    log.info("@debug: " + s);
 
                     // Parse names.
                     int lastNameIndex = s.indexOf("Last Name:");
@@ -110,7 +110,7 @@ public class JailData {
                     int dobIndex = s.indexOf("DOB:");
                     if (lastNameIndex >= 0 || firstNameIndex >= 0) {
                         if (arrestee != null && charge != null) {
-                            System.out.println(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
+                            log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                             arrestee.charges.add(charge);
                             charge = null;
                         }
@@ -118,16 +118,56 @@ public class JailData {
                             data.arrestees.add(arrestee);
                         }
                         arrestee = new Arrestee();
-                        arrestee.firstName = s.substring(firstNameIndex+11, middleNameIndex).trim();
-                        arrestee.middleName = s.substring(middleNameIndex+12, dobIndex).trim();
+                        if (middleNameIndex > -1) {
+                            arrestee.firstName = s.substring(firstNameIndex+11, middleNameIndex).trim();
+                            arrestee.middleName = s.substring(middleNameIndex+12, dobIndex).trim();
+                        }
+                        else {
+                            // Parse first name.
+                            String temp[] = s.substring(firstNameIndex+11).trim().split(" ");
+                            arrestee.firstName = temp[0];
+                            arrestee.middleName = temp[temp.length-2];
+                        }
                         arrestee.lastName = s.substring(lastNameIndex+10, firstNameIndex).trim();
-                        System.out.println("\nFirst Name: " + arrestee.firstName);
-                        System.out.println("Middle Name: " + arrestee.middleName);
-                        System.out.println("Last Name: " + arrestee.lastName);
+                        log.info("\n");
+                        log.info("First Name: " + arrestee.firstName);
+                        log.info("Middle Name: " + arrestee.middleName);
+                        log.info("Last Name: " + arrestee.lastName);
                         String temp = s.substring(dobIndex+4).trim();
                         if (temp != null && temp.length() > 0) {
-                            System.out.println("DOB: " + temp);
+                            log.info("DOB: " + temp);
                             arrestee.dob = sdf2.parse(temp);
+                        }
+
+                        // Find matching opted-in client.
+                        DbClient c = DbClient.findByNameDob(conn, arrestee.firstName,
+                                                            arrestee.lastName, arrestee.dob);
+                        if (c != null) {
+                            log.info("*** Opted-in client found, confidence level: 90%");
+                        }
+                        else {
+                            c = DbClient.findByNameDob(conn, null, arrestee.lastName,
+                                                       arrestee.dob);
+                            if (c != null) {
+                                log.info("*** Opted-in client found, confidence level: 70%");
+                            }
+                            else {
+                                c = DbClient.findByNameDob(conn, arrestee.firstName,
+                                                           null, arrestee.dob);
+                                if (c != null) {
+                                    log.info("*** Opted-in client found, confidence level: 60%");
+                                }
+                                else {
+                                    c = DbClient.findByNameDob(conn, arrestee.firstName,
+                                                               arrestee.lastName, null);
+                                    if (c != null) {
+                                        log.info("*** Opted-in client found, confidence level: 50%");
+                                    }
+                                    else {
+                                        log.info("*** Client not found!");
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -135,10 +175,12 @@ public class JailData {
                     if (!s.contains("San Diego County") &&
                         !s.contains("Arresting Agency") &&
                         !s.contains("Last Name") &&
-                        !s.contains("Arrnum Chgnum Code Section") &&
+                        !s.contains("Arrnum Chgnum") &&
+                        !s.contains("Code Section") &&
+                        !s.contains("250000FA_MEDIA") &&
                         !s.contains("RJuInM")) { // Shield logo.
                         if (arrestee != null && charge != null) {
-                            System.out.println(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
+                            log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                             arrestee.charges.add(charge);
                         }
                         charge = new OffenseCode();
@@ -166,7 +208,7 @@ public class JailData {
                 }
 
                 if (arrestee != null && charge != null) {
-                    System.out.println(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
+                    log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                     arrestee.charges.add(charge);
                 }
                 if (data != null && arrestee != null) {
