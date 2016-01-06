@@ -1,9 +1,12 @@
 Manifest-Version: 1.0
 Main-Class: com.cie.JailData
 Class-Path: .
+            lib/activation.jar
+            lib/additional.jar
             lib/commons-logging-1.2.jar
             lib/fontbox-2.0.0-RC2.jar
             lib/log4j-1.2.9.jar
+            lib/mail-1.4.1.jar
             lib/pdfbox-2.0.0-RC2.jar
             lib/postgresql-9.4-1201.jdbc41.jar
             
