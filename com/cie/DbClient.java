@@ -39,11 +39,6 @@ public class DbClient {
     public long etoParticipantSiteId;
     public long etoSubjectId;
 
-    public Date signDate = null;
-    public Date expDate = null;
-    public int programId = 0;
-    public int etoSiteId = 0;
-
     public void insert(Connection conn) {
         try {
             StringBuffer sb = new StringBuffer();

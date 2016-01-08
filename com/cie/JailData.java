@@ -253,14 +253,14 @@ public class JailData {
                             log.info("First Name: " + c.firstName);
                             log.info("Middle Name: " + c.lastName);
                             log.info("\n");
-                            sendEmail(data.effectiveDate, arrestedInfo);
+                            sendEmail(c.organizationId, data.effectiveDate, arrestedInfo);
                         }
                     }
                 }
             }
 
             // test email
-            sendEmail(null, null);
+            sendEmail(2, null, null);
 
             // Close document.
             document.close();
@@ -278,7 +278,10 @@ public class JailData {
         }
     }
 
-    private static void sendEmail(Date arrestedDate, Arrestee arrestedInfo) throws Exception {
+    private static void sendEmail(long orgId, Date arrestedDate, Arrestee arrestedInfo) throws Exception {
+        // Look up generic email from organization.
+
+        // Config email properties.
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.auth", "true");
@@ -302,7 +305,8 @@ public class JailData {
 
         // Set the FROM, TO, DATE and SUBJECT fields.
         msg.setFrom(new InternetAddress("minh@ciesandiego.org"));
-        msg.setRecipients(Message.RecipientType.TO,InternetAddress.parse("sddolphins@gmail.com"));
+        msg.setRecipients(Message.RecipientType.TO,
+                          InternetAddress.parse("sddolphins@gmail.com"));
         msg.setSentDate(new Date());
         msg.setSubject("Test email send from CIE");
 
