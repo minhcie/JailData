@@ -157,24 +157,28 @@ public class DbClient {
                 sb.append("etoParticipantSiteId, etoSubjectId ");
                 sb.append("FROM client ");
                 if (firstName != null && lastName != null && dob != null) {
-                    sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
-                    sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
+                    sb.append("WHERE firstName ~* '" + SqlString.encode(firstName) + "' ");
+                    sb.append("  AND lastName ~* '" + SqlString.encode(lastName) + "' ");
                     sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                    log.info("DbClient.findByNameDob(): name = " + firstName + " " + lastName + ", dob = " + sdf.format(dob));
                 }
                 else if (lastName != null && dob != null) {
-                    sb.append("WHERE lastName = '" + SqlString.encode(lastName) + "' ");
+                    sb.append("WHERE lastName ~* '" + SqlString.encode(lastName) + "' ");
                     sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                    log.info("DbClient.findByNameDob(): last name = " + lastName + ", dob = " + sdf.format(dob));
                 }
                 else if (firstName != null && dob != null) {
-                    sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
+                    sb.append("WHERE firstName ~* '" + SqlString.encode(firstName) + "' ");
                     sb.append("  AND dob = '" + sdf.format(dob) + "'");
+                    log.info("DbClient.findByNameDob(): first name = " + firstName + ", dob = " + sdf.format(dob));
                 }
                 else if (firstName != null && lastName != null) {
-                    sb.append("WHERE firstName = '" + SqlString.encode(firstName) + "' ");
-                    sb.append("  AND lastName = '" + SqlString.encode(lastName) + "' ");
+                    sb.append("WHERE firstName ~* '" + SqlString.encode(firstName) + "' ");
+                    sb.append("  AND lastName ~* '" + SqlString.encode(lastName) + "' ");
+                    log.info("DbClient.findByNameDob(): name = " + firstName + " " + lastName);
                 }
                 else {
-                    log.error("DbClient.findByNameDob() - Trying to find client with null names and dob.");
+                    log.info("DbClient.findByNameDob() - Trying to find client with null names and dob.");
                     return null;
                 }
 

@@ -27,17 +27,26 @@ public class JailData {
 
     private static final Logger log = Logger.getLogger(JailData.class.getName());
 
-    public static void main(String[] args) {
-        Connection conn = null;
+    static void usage() {
+        System.err.println("usage: java -jar JailData.jar <data.pdf>");
+        System.err.println("");
+        System.exit(-1);
+    }
 
+    public static void main(String[] args) {
+        if (args.length == 0 || args.length < 1) {
+            usage();
+        }
+
+        String fileName = args[0];
+        Connection conn = null;
         try {
             conn = DbUtils.getDBConnection();
             if (conn == null) {
                 System.exit(-1);
             }
 
-            log.info("Reading document...\n");
-            String fileName = "../Arrests.pdf";
+            log.info("Reading arrest data file name: " + fileName + "...\n");
             File f = new File(fileName);
             if (!f.exists()) {
                 log.error("File not found!");
@@ -52,13 +61,13 @@ public class JailData {
             stripper.setSortByPosition(true);
 
             // Set extract regions.
-            Rectangle header = new Rectangle(1, 1, 1224, 71);
+            Rectangle header = new Rectangle(0, 1, 1224, 71);
             Rectangle content = new Rectangle(0, 72, 1224, 1590);
             stripper.addRegion("header", header);
             stripper.addRegion("content", content);
 
             int pages = document.getNumberOfPages();
-            for (int n = 1; n < pages; n++) { // Ignore first page.
+            for (int n = 1; n < 2; n++) { // Ignore first page.
                 log.info("\n");
                 log.info("Page " + n + "\n");
                 PDPage page = document.getPage(n);
@@ -82,11 +91,13 @@ public class JailData {
                     }
 
                     // @debug.
-                    //log.info(s);
+                    //log.info("@debug: " + s);
 
-                    int k = s.indexOf("Effective Date:");
+                    //int k = s.indexOf("Effective Date:");
+                    int k = s.indexOf("TO");
                     if (k >= 0) {
-                        String temp = s.substring(k+15).trim();
+                        //String temp = s.substring(k+15).trim();
+                        String temp = s.substring(k+2).trim();
                         if (temp != null && temp.length() > 0) {
                             data.effectiveDate = sdf.parse(temp);
                             log.info("Effective Date: " + temp);
@@ -112,7 +123,7 @@ public class JailData {
                     }
 
                     // @debug.
-                    log.info("@debug: " + s);
+                    //log.info("@debug: " + s);
 
                     // Parse names.
                     int lastNameIndex = s.indexOf("Last Name:");
@@ -122,7 +133,7 @@ public class JailData {
                     if (lastNameIndex >= 0 || firstNameIndex >= 0) {
                         if (arrestee != null && charge != null) {
                             // Add charge info.
-                            log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
+                            //log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                             arrestee.charges.add(charge);
                             charge = null;
                         }
@@ -165,7 +176,7 @@ public class JailData {
                         !s.contains("RJuInM")) { // Shield logo.
                         if (arrestee != null && charge != null) {
                             // Add charge info.
-                            log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
+                            //log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                             arrestee.charges.add(charge);
                         }
                         charge = new OffenseCode();
@@ -178,14 +189,45 @@ public class JailData {
                                 case 1:
                                     charge.chargeNum = Integer.parseInt(codes[k].trim());
                                     break;
-                                default:
-                                    if (charge.code != null && charge.code.length() > 0) {
-                                        charge.code += " ";
-                                        charge.code += codes[k].trim();
+                                case 2:
+                                    String tmp = codes[k].trim();
+                                    charge.code = tmp;
+                                    DbOffenseCode oc = null;
+
+                                    // Fetch charge description.
+                                    if (tmp.contains("(A)(B)")) { // Multiple codes.
+                                        String code1 = tmp.replace("(B)", "");
+                                        oc = DbOffenseCode.findByCode(conn, code1);
+                                        if (oc != null) {
+                                            log.info("Charge code: " + code1 + " - " + oc.description);
+                                        }
+                                        else {
+                                            log.info("Charge code: " + code1);
+                                        }
+
+                                        String code2 = tmp.replace("(A)", "");
+                                        oc = DbOffenseCode.findByCode(conn, code2);
+                                        if (oc != null) {
+                                            log.info("Charge code: " + code2 + " - " + oc.description);
+                                        }
+                                        else {
+                                            log.info("Charge code: " + code2);
+                                        }
                                     }
                                     else {
-                                        charge.code = codes[k].trim();
+                                        oc = DbOffenseCode.findByCode(conn, charge.code);
+                                        if (oc != null) {
+                                            log.info("Charge code: " + charge.code + " - " + oc.description);
+                                        }
+                                        else {
+                                            log.info("Charge code: " + charge.code);
+                                        }
                                     }
+                                    break;
+                                case 3:
+                                    charge.codeType = codes[k].trim();
+                                    break;
+                                default:
                                     break;
                             }
                         }
@@ -194,7 +236,7 @@ public class JailData {
 
                 // Add charge info.
                 if (arrestee != null && charge != null) {
-                    log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
+                    //log.info(charge.arrestNum + " " + charge.chargeNum + " " + charge.code);
                     arrestee.charges.add(charge);
                 }
 
@@ -253,14 +295,52 @@ public class JailData {
                             log.info("First Name: " + c.firstName);
                             log.info("Middle Name: " + c.lastName);
                             log.info("\n");
-                            sendEmail(c.organizationId, data.effectiveDate, arrestedInfo);
+
+                            // Insert arrest record for each charge code.
+                            for (int k = 0; k < arrestedInfo.charges.size(); k++) {
+                                OffenseCode oc = arrestedInfo.charges.get(k);
+                                DbArrest rec = new DbArrest();
+                                rec.clientId = c.id;
+                                rec.arrestDate = data.effectiveDate;
+                                rec.arrestingAgency = data.arrestingAgency;
+                                rec.arrestNumber = oc.arrestNum;
+                                rec.chargeNumber = oc.chargeNum;
+                                rec.offenseCode = oc.code + " " + oc.codeType;
+                                rec.matchConfidence = confidence;
+                                rec.insert(conn);
+                            }
+
+                            // Look up client's open enrollments.
+                            List<DbEnrollment> enrolls = DbEnrollment.findOpenEnrollment(conn, c.id);
+                            if (enrolls != null && enrolls.size() > 0) {
+                                // Send notification email to the case manager with
+                                // matching program.
+                                for (int m = 0; m < enrolls.size(); m++) {
+                                    DbEnrollment e = enrolls.get(m);
+                                    DbGenericCaseManager mgr = DbGenericCaseManager.findByOrganizationProgram(conn,
+                                                                                                              c.organizationId,
+                                                                                                              e.etoProgramId);
+                                    if (mgr != null) {
+                                        sendEmail(conn, mgr.email, data.effectiveDate,
+                                                  data.arrestingAgency, arrestedInfo,
+                                                  confidence);
+                                    }
+                                }
+                            }
+
+                            // Also send notification email to the case manager
+                            // for all programs.
+                            DbGenericCaseManager mgr = DbGenericCaseManager.findByOrganization(conn,
+                                                                                               c.organizationId);
+                            if (mgr != null) {
+                                sendEmail(conn, mgr.email, data.effectiveDate,
+                                          data.arrestingAgency, arrestedInfo,
+                                          confidence);
+                            }
                         }
                     }
                 }
             }
-
-            // test email
-            sendEmail(2, null, null);
 
             // Close document.
             document.close();
@@ -278,8 +358,60 @@ public class JailData {
         }
     }
 
-    private static void sendEmail(long orgId, Date arrestedDate, Arrestee arrestedInfo) throws Exception {
-        // Look up generic email from organization.
+    private static void sendEmail(Connection conn, String mgrEmailAddr,
+                                  Date arrestedDate, String arrestedAgency,
+                                  Arrestee arrestedInfo, int confidence) throws Exception {
+        // Format email message.
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+        StringBuffer msg = new StringBuffer();
+        msg.append("\n");
+        msg.append("***** Client match confidence " + confidence + "% *****");
+        msg.append("\n");
+        msg.append("CIE auto-notification for client: ");
+        msg.append(arrestedInfo.firstName + " " + arrestedInfo.lastName);
+        msg.append(" (XX/XX/" + sdf.format(arrestedInfo.dob) + ")");
+        msg.append("\n");
+        msg.append("Client was arrested on " + sdf2.format(arrestedDate));
+        msg.append(" by " + arrestedAgency);
+        msg.append(" with the following charge(s):");
+        msg.append("\n");
+        for (int i = 0; i < arrestedInfo.charges.size(); i++) {
+            OffenseCode oc = arrestedInfo.charges.get(i);
+
+            // Retrieve charge description.
+            DbOffenseCode dboc = null;
+            String tmp = oc.code;
+            if (tmp.contains("(A)(B)")) { // Multiple codes.
+                String code1 = tmp.replace("(B)", "");
+                dboc = DbOffenseCode.findByCode(conn, code1);
+                if (dboc != null) {
+                    msg.append(code1 + " - " + dboc.description);
+                }
+                else {
+                    msg.append(code1);
+                }
+
+                String code2 = tmp.replace("(A)", "");
+                dboc = DbOffenseCode.findByCode(conn, code2);
+                if (dboc != null) {
+                    msg.append(code2 + " - " + dboc.description);
+                }
+                else {
+                    msg.append(code2);
+                }
+            }
+            else {
+                dboc = DbOffenseCode.findByCode(conn, tmp);
+                if (dboc != null) {
+                    msg.append(tmp + " - " + dboc.description);
+                }
+                else {
+                    msg.append(tmp);
+                }
+            }
+            msg.append("\n");
+        }
 
         // Config email properties.
         Properties props = new Properties();
@@ -301,19 +433,20 @@ public class JailData {
         // Enable the debug mode.
         mailSession.setDebug(true);
 
-        Message msg = new MimeMessage(mailSession);
+        Message mail = new MimeMessage(mailSession);
 
         // Set the FROM, TO, DATE and SUBJECT fields.
-        msg.setFrom(new InternetAddress("minh@ciesandiego.org"));
-        msg.setRecipients(Message.RecipientType.TO,
-                          InternetAddress.parse("sddolphins@gmail.com"));
-        msg.setSentDate(new Date());
-        msg.setSubject("Test email send from CIE");
+        mail.setFrom(new InternetAddress("minh@ciesandiego.org"));
+        mail.setRecipients(Message.RecipientType.TO,
+                          InternetAddress.parse(mgrEmailAddr));
+        mail.setSentDate(new Date());
+        mail.setSubject("CIE San Diego - Arrest Notification");
 
         // Email body.
-        msg.setText("Hello from my first e-mail sent with JavaMail");
+        mail.setText(msg.toString());
 
         // Send email message. 
-        Transport.send( msg );
+        log.info("Send notification email to: " + mgrEmailAddr);
+        Transport.send(mail);
     }
 }

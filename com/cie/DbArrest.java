@@ -19,13 +19,14 @@ public class DbArrest {
     public int arrestNumber;
     public int chargeNumber;
     public String offenseCode;
+    public int matchConfidence;
 
     public void insert(Connection conn) {
         try {
             StringBuffer sb = new StringBuffer();
             sb.append("INSERT INTO arrest (clientId, arrestDate, arrestingAgency, ");
-            sb.append("arrestNumber, chargeNumber, offenseCode ");
-            sb.append("VALUES (?, ?, ?, ?, ?, ?)");
+            sb.append("arrestNumber, chargeNumber, offenseCode, matchConfidence) ");
+            sb.append("VALUES (?, ?, ?, ?, ?, ?, ?)");
 
             PreparedStatement ps = conn.prepareStatement(sb.toString(),
                                                          Statement.RETURN_GENERATED_KEYS);
@@ -36,6 +37,7 @@ public class DbArrest {
             ps.setInt(4, this.arrestNumber);
             ps.setInt(5, this.chargeNumber);
             ps.setString(6, SqlString.encode(this.offenseCode));
+            ps.setInt(7, this.matchConfidence);
 
             int out = ps.executeUpdate();
             if (out == 0) {

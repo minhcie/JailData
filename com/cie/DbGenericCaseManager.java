@@ -32,12 +32,40 @@ public class DbGenericCaseManager {
             ResultSet rs = statement.executeQuery(sb.toString());
             while (rs.next()) {
                 long etoPrgmId = rs.getLong("etoProgramId");
+                if (etoPrgmId == programId) {
+                    // Found case manager with matching program.
+                    caseMgr = caseManagerInfo(rs);
+                    break;
+                }
+            }
+
+            rs.close();
+            statement.close();
+        }
+        catch (SQLException sqle) {
+            log.error("SQLException in DbGenericCaseManager.findByOrganizationProgram(): " + sqle);
+        }
+        catch (Exception e) {
+            log.error("Exception in DbGenericCaseManager.findByOrganizationProgram(): " + e);
+        }
+        return caseMgr;
+    }
+
+    public static DbGenericCaseManager findByOrganization(Connection conn, long orgId) {
+        DbGenericCaseManager caseMgr = null;
+        try {
+            StringBuffer sb = new StringBuffer();
+            sb.append("SELECT id, organizationId, etoProgramId, etoProgramName, ");
+            sb.append("firstName, lastName, email, phone ");
+            sb.append("FROM generic_case_manager ");
+            sb.append("WHERE organizationId = " + orgId);
+
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sb.toString());
+            while (rs.next()) {
+                long etoPrgmId = rs.getLong("etoProgramId");
                 if (etoPrgmId == 0) {
                     // Case manager for all programs.
-                    caseMgr = caseManagerInfo(rs);
-                }
-                else if (etoPrgmId == programId) {
-                    // Found case manager with matching program.
                     caseMgr = caseManagerInfo(rs);
                     break;
                 }
