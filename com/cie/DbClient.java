@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -144,9 +146,9 @@ public class DbClient {
         }
     }
 
-    public static DbClient findByNameDob(Connection conn, String firstName,
-                                         String lastName, Date dob) {
-        DbClient client = null;
+    public static List<DbClient> findByNameDob(Connection conn, String firstName,
+                                               String lastName, Date dob) {
+        List<DbClient> results = new ArrayList<DbClient>();
         try {
             if (dob != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -179,13 +181,16 @@ public class DbClient {
                 }
                 else {
                     log.info("DbClient.findByNameDob() - Trying to find client with null names and dob.");
-                    return null;
+                    return results;
                 }
+
+                // @debug.
+                //log.info("DbClient.findByNameDob(): " + sb.toString());
 
                 Statement statement = conn.createStatement();
                 ResultSet rs = statement.executeQuery(sb.toString());
-                if (rs.next()) {
-                    client = new DbClient();
+                while (rs.next()) {
+                    DbClient client = new DbClient();
                     client.id = rs.getLong("id");
                     client.organizationId = rs.getLong("organizationId");
                     client.genderId = rs.getLong("genderId");
@@ -199,6 +204,7 @@ public class DbClient {
                     client.etoEnterpriseId = (UUID)rs.getObject("etoEnterpriseId");
                     client.etoParticipantSiteId = rs.getLong("etoParticipantSiteId");
                     client.etoSubjectId = rs.getLong("etoSubjectId");
+                    results.add(client);
                 }
 
                 rs.close();
@@ -211,6 +217,6 @@ public class DbClient {
         catch (Exception e) {
             log.error("Exception in DbClient.findByNameDob(): " + e);
         }
-        return client;
+        return results;
     }
 }

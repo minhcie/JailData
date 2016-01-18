@@ -67,7 +67,7 @@ public class JailData {
             stripper.addRegion("content", content);
 
             int pages = document.getNumberOfPages();
-            for (int n = 1; n < 2; n++) { // Ignore first page.
+            for (int n = 1; n < pages; n++) { // Ignore first page.
                 log.info("\n");
                 log.info("Page " + n + "\n");
                 PDPage page = document.getPage(n);
@@ -252,33 +252,38 @@ public class JailData {
 
                         boolean found = false;
                         int confidence = 0;
-                        DbClient c = DbClient.findByNameDob(conn, arrestedInfo.firstName,
-                                                            arrestedInfo.lastName, arrestedInfo.dob);
-                        if (c != null) {
+                        List<DbClient> results = DbClient.findByNameDob(conn,
+                                                                        arrestedInfo.firstName,
+                                                                        arrestedInfo.lastName,
+                                                                        arrestedInfo.dob);
+                        if (results != null && results.size() > 0) {
                             log.info("*** Opted-in client found, confidence level: 90%");
                             found = true;
                             confidence = 90;
                         }
                         else {
-                            c = DbClient.findByNameDob(conn, null, arrestedInfo.lastName,
-                                                       arrestedInfo.dob);
-                            if (c != null) {
+                            results = DbClient.findByNameDob(conn, null,
+                                                             arrestedInfo.lastName,
+                                                             arrestedInfo.dob);
+                            if (results != null && results.size() > 0) {
                                 log.info("*** Opted-in client found, confidence level: 70%");
                                 found = true;
                                 confidence = 70;
                             }
                             else {
-                                c = DbClient.findByNameDob(conn, arrestedInfo.firstName,
-                                                           null, arrestedInfo.dob);
-                                if (c != null) {
+                                results = DbClient.findByNameDob(conn, arrestedInfo.firstName,
+                                                                 null, arrestedInfo.dob);
+                                if (results != null && results.size() > 0) {
                                     log.info("*** Opted-in client found, confidence level: 60%");
                                     found = true;
                                     confidence = 60;
                                 }
                                 else {
-                                    c = DbClient.findByNameDob(conn, arrestedInfo.firstName,
-                                                               arrestedInfo.lastName, null);
-                                    if (c != null) {
+                                    results = DbClient.findByNameDob(conn,
+                                                                     arrestedInfo.firstName,
+                                                                     arrestedInfo.lastName,
+                                                                     null);
+                                    if (results != null && results.size() > 0) {
                                         log.info("*** Opted-in client found, confidence level: 50%");
                                         found = true;
                                         confidence = 50;
@@ -290,52 +295,52 @@ public class JailData {
                             }
                         }
 
-                        // Notify the client's case manager if a match is found.
-                        if (found && c != null) {
-                            log.info("First Name: " + c.firstName);
-                            log.info("Middle Name: " + c.lastName);
-                            log.info("\n");
+                        // Notify the client's case manager(s) if a match is found.
+                        if (found && results != null && results.size() > 0) {
+                            for (int ii = 0; ii < results.size(); ii++) {
+                                DbClient c = results.get(ii);
 
-                            // Insert arrest record for each charge code.
-                            for (int k = 0; k < arrestedInfo.charges.size(); k++) {
-                                OffenseCode oc = arrestedInfo.charges.get(k);
-                                DbArrest rec = new DbArrest();
-                                rec.clientId = c.id;
-                                rec.arrestDate = data.effectiveDate;
-                                rec.arrestingAgency = data.arrestingAgency;
-                                rec.arrestNumber = oc.arrestNum;
-                                rec.chargeNumber = oc.chargeNum;
-                                rec.offenseCode = oc.code + " " + oc.codeType;
-                                rec.matchConfidence = confidence;
-                                rec.insert(conn);
-                            }
+                                // Insert arrest record for each charge code.
+                                for (int k = 0; k < arrestedInfo.charges.size(); k++) {
+                                    OffenseCode oc = arrestedInfo.charges.get(k);
+                                    DbArrest rec = new DbArrest();
+                                    rec.clientId = c.id;
+                                    rec.arrestDate = data.effectiveDate;
+                                    rec.arrestingAgency = data.arrestingAgency;
+                                    rec.arrestNumber = oc.arrestNum;
+                                    rec.chargeNumber = oc.chargeNum;
+                                    rec.offenseCode = oc.code + " " + oc.codeType;
+                                    rec.matchConfidence = confidence;
+                                    rec.insert(conn);
+                                }
 
-                            // Look up client's open enrollments.
-                            List<DbEnrollment> enrolls = DbEnrollment.findOpenEnrollment(conn, c.id);
-                            if (enrolls != null && enrolls.size() > 0) {
-                                // Send notification email to the case manager with
-                                // matching program.
-                                for (int m = 0; m < enrolls.size(); m++) {
-                                    DbEnrollment e = enrolls.get(m);
-                                    DbGenericCaseManager mgr = DbGenericCaseManager.findByOrganizationProgram(conn,
-                                                                                                              c.organizationId,
-                                                                                                              e.etoProgramId);
-                                    if (mgr != null) {
-                                        sendEmail(conn, mgr.email, data.effectiveDate,
-                                                  data.arrestingAgency, arrestedInfo,
-                                                  confidence);
+                                // Look up client's open enrollments.
+                                List<DbEnrollment> enrolls = DbEnrollment.findOpenEnrollment(conn, c.id);
+                                if (enrolls != null && enrolls.size() > 0) {
+                                    // Send notification email to the case manager with
+                                    // matching program.
+                                    for (int m = 0; m < enrolls.size(); m++) {
+                                        DbEnrollment e = enrolls.get(m);
+                                        DbGenericCaseManager mgr = DbGenericCaseManager.findByOrganizationProgram(conn,
+                                                                                                                  c.organizationId,
+                                                                                                                  e.etoProgramId);
+                                        if (mgr != null) {
+                                            sendEmail(conn, mgr.email, data.effectiveDate,
+                                                      data.arrestingAgency, arrestedInfo,
+                                                      confidence);
+                                        }
                                     }
                                 }
-                            }
 
-                            // Also send notification email to the case manager
-                            // for all programs.
-                            DbGenericCaseManager mgr = DbGenericCaseManager.findByOrganization(conn,
-                                                                                               c.organizationId);
-                            if (mgr != null) {
-                                sendEmail(conn, mgr.email, data.effectiveDate,
-                                          data.arrestingAgency, arrestedInfo,
-                                          confidence);
+                                // Also send notification email to the case manager
+                                // for all programs.
+                                DbGenericCaseManager mgr = DbGenericCaseManager.findByOrganization(conn,
+                                                                                                   c.organizationId);
+                                if (mgr != null) {
+                                    sendEmail(conn, mgr.email, data.effectiveDate,
+                                              data.arrestingAgency, arrestedInfo,
+                                              confidence);
+                                }
                             }
                         }
                     }
@@ -412,6 +417,14 @@ public class JailData {
             }
             msg.append("\n");
         }
+        msg.append("\n");
+        msg.append("In reviewing the arrest data, please be aware that the initial booking charges may be ");
+        msg.append("modified, dropped or expanded as the case progresses through the criminal justice ");
+        msg.append("system. To further check inmate status, you may access the San Diego County Sheriff’s ");
+        msg.append("Department Who Is In Jail application (www.sdsheriff.net).  In addition, to track inmate ");
+        msg.append("release date, please register in the law enforcement Victim Identification and Notification ");
+        msg.append("system (www.vinelink.com).");
+        msg.append("\n");
 
         // Config email properties.
         Properties props = new Properties();

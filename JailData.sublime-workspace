@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"cl",
+				"client"
+			],
+			[
 				"Con",
 				"Connection"
 			],
@@ -487,7 +491,7 @@
 			"file": "com/cie/DbClient.java",
 			"settings":
 			{
-				"buffer_size": 9587,
+				"buffer_size": 10295,
 				"line_ending": "Unix"
 			}
 		},
@@ -495,7 +499,7 @@
 			"file": "com/cie/DbEnrollment.java",
 			"settings":
 			{
-				"buffer_size": 2376,
+				"buffer_size": 2378,
 				"line_ending": "Unix"
 			}
 		},
@@ -511,7 +515,7 @@
 			"file": "com/cie/JailData.java",
 			"settings":
 			{
-				"buffer_size": 20396,
+				"buffer_size": 21391,
 				"line_ending": "Unix"
 			}
 		},
@@ -519,7 +523,7 @@
 			"file": "/Users/minh/Source/CIE-Data/SQL/pg_arrest.sql",
 			"settings":
 			{
-				"buffer_size": 1189,
+				"buffer_size": 1517,
 				"line_ending": "Unix"
 			}
 		}
@@ -576,19 +580,20 @@
 	},
 	"file_history":
 	[
+		"/Users/minh/Source/CIE-Data/JailData/JailData.log",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/OffenseCode.java",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbOffenseCode.java",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbArrest.java",
+		"/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
 		"/Users/minh/Source/CIE-Data/application.log",
 		"/Users/minh/Source/CIE-Data/application.log.1",
-		"/Users/minh/Source/CIE-Data/JailData/com/cie/OffenseCode.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/Arrestee.java",
-		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbArrest.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/ArrestData.java",
-		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbOffenseCode.java",
 		"/Applications/play-1.2.7/modules/lombok/README",
 		"/Users/minh/Source/CIE-HL7/com/cie/hl7/HL7Test.java",
 		"/Users/minh/Source/CIE-HL7/com/cie/hl7/HL7Listener.java",
 		"/Users/minh/Source/CIE-HL7/hl7Test.properties",
 		"/Users/minh/Source/CIE-Data/JailData/build/manifest.mf",
-		"/Users/minh/Source/CIE-Data/JailData/JailData.log",
 		"/Users/minh/Source/CIE-Data/JailData/log4j.properties",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbClient.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbUtils.java",
@@ -702,8 +707,7 @@
 		"/Users/minh/Source/CIEDashboard/app/models/ProgramType.java",
 		"/Users/minh/Source/CIEDashboard/app/views/ProgramTypes/index.html",
 		"/Users/minh/Source/CIEAdmin/app/models/DisplayRole.java",
-		"/Users/minh/Source/CIEAdmin/public/javascripts/jquery.inputmask.js",
-		"/Users/minh/Source/CIEAdmin/public/stylesheets/sweet-alert.css"
+		"/Users/minh/Source/CIEAdmin/public/javascripts/jquery.inputmask.js"
 	],
 	"find":
 	{
@@ -722,6 +726,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"client found",
+			"int m = 0",
+			"int k = 0",
+			"int n = 0",
+			"findByNameDob",
+			"effectiveDate",
+			"lastName",
+			"fileName",
 			"not found",
 			"01-13",
 			"msg",
@@ -841,15 +853,7 @@
 			"transports",
 			"Transports",
 			"transports",
-			"nutritions",
-			"adlTable",
-			"adls",
-			"BigDecimal",
-			"Timestamp",
-			"DisplayTransport",
-			"transports",
-			"join",
-			"inner"
+			"nutritions"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -867,7 +871,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -875,15 +879,15 @@
 					"file": "com/cie/DbClient.java",
 					"settings":
 					{
-						"buffer_size": 9587,
+						"buffer_size": 10295,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								427,
-								441
+								7098,
+								7098
 							]
 						],
 						"settings":
@@ -893,7 +897,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 146.0,
+						"translation.y": 2548.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -903,15 +907,15 @@
 					"file": "com/cie/DbEnrollment.java",
 					"settings":
 					{
-						"buffer_size": 2376,
+						"buffer_size": 2378,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1013,
-								1013
+								1252,
+								1252
 							]
 						],
 						"settings":
@@ -921,7 +925,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 222.0,
+						"translation.y": 198.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -938,8 +942,8 @@
 						"selection":
 						[
 							[
-								519,
-								519
+								995,
+								995
 							]
 						],
 						"settings":
@@ -949,7 +953,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 153.0,
+						"translation.y": 454.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -965,15 +969,15 @@
 					"file": "com/cie/JailData.java",
 					"settings":
 					{
-						"buffer_size": 20396,
+						"buffer_size": 21391,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								11688,
+								11688
 							]
 						],
 						"settings":
@@ -982,8 +986,8 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 417.0,
+						"translation.x": 160.0,
+						"translation.y": 4210.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -993,15 +997,15 @@
 					"file": "/Users/minh/Source/CIE-Data/SQL/pg_arrest.sql",
 					"settings":
 					{
-						"buffer_size": 1189,
+						"buffer_size": 1517,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								804,
+								804
 							]
 						],
 						"settings":
@@ -1078,6 +1082,14 @@
 			[
 				"off",
 				"com/cie/OffenseCode.java"
+			],
+			[
+				"dbof",
+				"com/cie/DbOffenseCode.java"
+			],
+			[
+				"dbar",
+				"com/cie/DbArrest.java"
 			],
 			[
 				"arrest",
@@ -1578,14 +1590,6 @@
 			[
 				"sidemenu",
 				"app/views/tags/sidemenu.html"
-			],
-			[
-				"supp",
-				"app/views/Clients/support.html"
-			],
-			[
-				"housin",
-				"app/views/Clients/housing.html"
 			]
 		],
 		"width": 0.0
@@ -1597,7 +1601,7 @@
 		[
 			[
 				"",
-				"/Users/minh/Source/CIE-Data/HudCsv/HudCsv.sublime-project"
+				"/Users/minh/Source/ETLDashboard/ETLDashboard.sublime-project"
 			]
 		],
 		"width": 380.0
