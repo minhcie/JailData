@@ -297,6 +297,7 @@ public class JailData {
 
                         // Notify the client's case manager(s) if a match is found.
                         if (found && results != null && results.size() > 0) {
+                            log.info("*** " + results.size() + " matching clients found...");
                             for (int ii = 0; ii < results.size(); ii++) {
                                 DbClient c = results.get(ii);
 
@@ -311,6 +312,9 @@ public class JailData {
                                     rec.chargeNumber = oc.chargeNum;
                                     rec.offenseCode = oc.code + " " + oc.codeType;
                                     rec.matchConfidence = confidence;
+
+                                    // Save arrest info.
+                                    log.info("Save arrest info for client id: " + c.id);
                                     rec.insert(conn);
                                 }
 

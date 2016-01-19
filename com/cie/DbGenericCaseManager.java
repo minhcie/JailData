@@ -28,6 +28,9 @@ public class DbGenericCaseManager {
             sb.append("FROM generic_case_manager ");
             sb.append("WHERE organizationId = " + orgId);
 
+            // @debug.
+            log.info("DbGenericCaseManager.findByOrganizationProgram() - " + sb.toString());
+            
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(sb.toString());
             while (rs.next()) {
@@ -60,6 +63,9 @@ public class DbGenericCaseManager {
             sb.append("FROM generic_case_manager ");
             sb.append("WHERE organizationId = " + orgId);
 
+            // @debug.
+            log.info("DbGenericCaseManager.findByOrganization() - " + sb.toString());
+            
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(sb.toString());
             while (rs.next()) {
