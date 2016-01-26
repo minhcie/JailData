@@ -298,8 +298,17 @@ public class JailData {
                         // Notify the client's case manager(s) if a match is found.
                         if (found && results != null && results.size() > 0) {
                             log.info("*** " + results.size() + " matching clients found...");
+                            long prevOrdId = 0;
                             for (int ii = 0; ii < results.size(); ii++) {
                                 DbClient c = results.get(ii);
+
+                                // Same client, so only send one to each site.
+                                if (prevOrdId == c.organizationId) {
+                                    continue;
+                                }
+                                else {
+                                    prevOrdId = c.organizationId;
+                                }
 
                                 // Insert arrest record for each charge code.
                                 for (int k = 0; k < arrestedInfo.charges.size(); k++) {
@@ -425,9 +434,9 @@ public class JailData {
         msg.append("In reviewing the arrest data, please be aware that the initial booking charges may be ");
         msg.append("modified, dropped or expanded as the case progresses through the criminal justice ");
         msg.append("system. To further check inmate status, you may access the San Diego County Sheriff’s ");
-        msg.append("Department Who Is In Jail application (www.sdsheriff.net).  In addition, to track inmate ");
-        msg.append("release date, please register in the law enforcement Victim Identification and Notification ");
-        msg.append("system (www.vinelink.com).");
+        msg.append("Department Who Is In Jail application (http://apps.sdsheriff.net/wij/wij.aspx) and ");
+        msg.append("also use its direct link to track release date through the Victim Identification and ");
+        msg.append("Notification system (www.vinelink.com).");
         msg.append("\n");
 
         // Config email properties.

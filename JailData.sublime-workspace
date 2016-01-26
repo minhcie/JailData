@@ -499,7 +499,7 @@
 			"file": "com/cie/DbEnrollment.java",
 			"settings":
 			{
-				"buffer_size": 2378,
+				"buffer_size": 2492,
 				"line_ending": "Unix"
 			}
 		},
@@ -507,7 +507,7 @@
 			"file": "com/cie/DbGenericCaseManager.java",
 			"settings":
 			{
-				"buffer_size": 3668,
+				"buffer_size": 3919,
 				"line_ending": "Unix"
 			}
 		},
@@ -515,7 +515,7 @@
 			"file": "com/cie/JailData.java",
 			"settings":
 			{
-				"buffer_size": 22048,
+				"buffer_size": 22289,
 				"line_ending": "Unix"
 			}
 		},
@@ -524,6 +524,14 @@
 			"settings":
 			{
 				"buffer_size": 1517,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
+			"settings":
+			{
+				"buffer_size": 3514,
 				"line_ending": "Unix"
 			}
 		}
@@ -580,11 +588,13 @@
 	},
 	"file_history":
 	[
-		"/Users/minh/Source/CIE-Data/JailData/JailData.log",
 		"/Users/minh/Source/ETLDashboard/logs/application.log",
+		"/Users/minh/Source/CIE-Data/JailData/JailData.log",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbUtils.java",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbArrest.java",
+		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbGenericCaseManager.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/OffenseCode.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbOffenseCode.java",
-		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbArrest.java",
 		"/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
 		"/Users/minh/Source/CIE-Data/application.log",
 		"/Users/minh/Source/CIE-Data/application.log.1",
@@ -597,7 +607,6 @@
 		"/Users/minh/Source/CIE-Data/JailData/build/manifest.mf",
 		"/Users/minh/Source/CIE-Data/JailData/log4j.properties",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbClient.java",
-		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbUtils.java",
 		"/Users/minh/Source/CIE-Data/SQL/pg_care_provider.sql",
 		"/Users/minh/Source/CIE-Data/JailData/.git/MERGE_MSG",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/ArrestInfo.java",
@@ -706,8 +715,7 @@
 		"/Users/minh/Source/CIEDashboard/conf/messages",
 		"/Users/minh/Source/CIEDashboard/app/controllers/ProgramTypes.java",
 		"/Users/minh/Source/CIEDashboard/app/models/ProgramType.java",
-		"/Users/minh/Source/CIEDashboard/app/views/ProgramTypes/index.html",
-		"/Users/minh/Source/CIEAdmin/app/models/DisplayRole.java"
+		"/Users/minh/Source/CIEDashboard/app/views/ProgramTypes/index.html"
 	],
 	"find":
 	{
@@ -726,6 +734,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"hud",
+			"01-20",
+			"send notification",
+			"confidence",
+			"sendEmail",
 			"confidence",
 			"hud response",
 			"client found",
@@ -848,12 +861,7 @@
 			"homePhone",
 			"clientId",
 			"supplemental",
-			"import",
-			"Date",
-			"Timestamp",
-			"transportTable",
-			"transports",
-			"Transports"
+			"import"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -886,8 +894,8 @@
 						"selection":
 						[
 							[
-								7098,
-								7098
+								7319,
+								7319
 							]
 						],
 						"settings":
@@ -897,7 +905,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2548.0,
+						"translation.y": 1901.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -907,15 +915,15 @@
 					"file": "com/cie/DbEnrollment.java",
 					"settings":
 					{
-						"buffer_size": 2378,
+						"buffer_size": 2492,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1252,
-								1252
+								1130,
+								1130
 							]
 						],
 						"settings":
@@ -925,7 +933,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 198.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -935,15 +943,15 @@
 					"file": "com/cie/DbGenericCaseManager.java",
 					"settings":
 					{
-						"buffer_size": 3668,
+						"buffer_size": 3919,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								995,
-								995
+								2074,
+								2074
 							]
 						],
 						"settings":
@@ -953,7 +961,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 454.0,
+						"translation.y": 789.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -961,7 +969,7 @@
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -969,15 +977,15 @@
 					"file": "com/cie/JailData.java",
 					"settings":
 					{
-						"buffer_size": 22048,
+						"buffer_size": 22289,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								11353,
+								11353
 							]
 						],
 						"settings":
@@ -987,7 +995,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1190.0,
+						"translation.y": 4230.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1004,8 +1012,8 @@
 						"selection":
 						[
 							[
-								0,
-								1236
+								690,
+								690
 							]
 						],
 						"settings":
@@ -1016,6 +1024,32 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
+					"settings":
+					{
+						"buffer_size": 3514,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2200,
+								2200
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQL/SQL.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 191.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1079,6 +1113,18 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"dbu",
+				"com/cie/DbUtils.java"
+			],
+			[
+				"dbge",
+				"com/cie/DbGenericCaseManager.java"
+			],
+			[
+				"dbarr",
+				"com/cie/DbArrest.java"
+			],
 			[
 				"off",
 				"com/cie/OffenseCode.java"
@@ -1578,18 +1624,6 @@
 			[
 				"sidemen",
 				"app/views/tags/sidemenu.html"
-			],
-			[
-				"roles",
-				"app/controllers/Roles.java"
-			],
-			[
-				"programtypes.ja",
-				"app/controllers/ProgramTypes.java"
-			],
-			[
-				"sidemenu",
-				"app/views/tags/sidemenu.html"
 			]
 		],
 		"width": 0.0
@@ -1601,7 +1635,7 @@
 		[
 			[
 				"",
-				"/Users/minh/Source/CIE-Data/extract/extract.sublime-project"
+				"/Users/minh/Source/ETLDashboard/ETLDashboard.sublime-project"
 			]
 		],
 		"width": 380.0
