@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"org",
+				"organizationId"
+			],
+			[
 				"cl",
 				"client"
 			],
@@ -22,10 +26,6 @@
 			[
 				"mgr",
 				"mgrEmailAddr"
-			],
-			[
-				"org",
-				"orgId"
 			],
 			[
 				"chag",
@@ -491,7 +491,7 @@
 			"file": "com/cie/DbClient.java",
 			"settings":
 			{
-				"buffer_size": 10295,
+				"buffer_size": 10530,
 				"line_ending": "Unix"
 			}
 		},
@@ -515,7 +515,7 @@
 			"file": "com/cie/JailData.java",
 			"settings":
 			{
-				"buffer_size": 22289,
+				"buffer_size": 22705,
 				"line_ending": "Unix"
 			}
 		},
@@ -524,14 +524,6 @@
 			"settings":
 			{
 				"buffer_size": 1517,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
-			"settings":
-			{
-				"buffer_size": 3514,
 				"line_ending": "Unix"
 			}
 		}
@@ -588,6 +580,7 @@
 	},
 	"file_history":
 	[
+		"/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
 		"/Users/minh/Source/ETLDashboard/logs/application.log",
 		"/Users/minh/Source/CIE-Data/JailData/JailData.log",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbUtils.java",
@@ -595,7 +588,6 @@
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbGenericCaseManager.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/OffenseCode.java",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/DbOffenseCode.java",
-		"/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
 		"/Users/minh/Source/CIE-Data/application.log",
 		"/Users/minh/Source/CIE-Data/application.log.1",
 		"/Users/minh/Source/CIE-Data/JailData/com/cie/Arrestee.java",
@@ -887,15 +879,15 @@
 					"file": "com/cie/DbClient.java",
 					"settings":
 					{
-						"buffer_size": 10295,
+						"buffer_size": 10530,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7319,
-								7319
+								8637,
+								8637
 							]
 						],
 						"settings":
@@ -905,7 +897,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1901.0,
+						"translation.y": 2777.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -977,15 +969,15 @@
 					"file": "com/cie/JailData.java",
 					"settings":
 					{
-						"buffer_size": 22289,
+						"buffer_size": 22705,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11353,
-								11353
+								18051,
+								18051
 							]
 						],
 						"settings":
@@ -995,7 +987,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4230.0,
+						"translation.y": 5576.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1024,32 +1016,6 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/Users/minh/Source/CIE-Data/SQL/pg_generic_case_manager.sql",
-					"settings":
-					{
-						"buffer_size": 3514,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2200,
-								2200
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/SQL/SQL.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 191.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1635,7 +1601,7 @@
 		[
 			[
 				"",
-				"/Users/minh/Source/ETLDashboard/ETLDashboard.sublime-project"
+				"/Users/minh/Source/DirMonitor/DirMonitor.sublime-project"
 			]
 		],
 		"width": 380.0

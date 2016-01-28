@@ -3,6 +3,7 @@ package com.cie;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.lang.NumberFormatException;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -184,10 +185,24 @@ public class JailData {
                         for (int k = 0; k < codes.length; k++) {
                             switch (k) {
                                 case 0:
-                                    charge.arrestNum = Integer.parseInt(codes[k].trim());
+                                    try {
+                                        charge.arrestNum = Integer.parseInt(codes[k].trim());
+                                    }
+                                    catch (NumberFormatException nfe) {
+                                        // Do nothing, continue to next line.
+                                        k = codes.length;
+                                        continue;
+                                    }
                                     break;
                                 case 1:
-                                    charge.chargeNum = Integer.parseInt(codes[k].trim());
+                                    try {
+                                        charge.chargeNum = Integer.parseInt(codes[k].trim());
+                                    }
+                                    catch (NumberFormatException nfe) {
+                                        // Do nothing, continue to next line.
+                                        k = codes.length;
+                                        continue;
+                                    }
                                     break;
                                 case 2:
                                     String tmp = codes[k].trim();
