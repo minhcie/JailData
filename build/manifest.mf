@@ -5,6 +5,10 @@ Class-Path: .
             lib/additional.jar
             lib/commons-logging-1.2.jar
             lib/fontbox-2.0.0-RC2.jar
+            lib/jersey-client-1.18.jar
+            lib/jersey-core-1.18.jar
+            lib/json-simple-1.1.1.jar
+            lib/jsr311-api-1.1.1.jar
             lib/log4j-1.2.9.jar
             lib/mail-1.4.1.jar
             lib/pdfbox-2.0.0-RC2.jar

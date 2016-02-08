@@ -68,7 +68,8 @@ public class JailData {
             stripper.addRegion("content", content);
 
             int pages = document.getNumberOfPages();
-            for (int n = 1; n < pages; n++) { // Ignore first page.
+            //for (int n = 1; n < pages; n++) { // Ignore first page.
+            for (int n = 24; n < 25; n++) { // Test data.
                 log.info("\n");
                 log.info("Page " + n + "\n");
                 PDPage page = document.getPage(n);
@@ -314,10 +315,13 @@ public class JailData {
                         if (found && results != null && results.size() > 0) {
                             log.info("*** " + results.size() + " matching clients found...");
                             long prevOrdId = 0;
+                            String prevFirstName = "";
+                            String prevLastName = "";
+                            long prevDob = 0;
                             for (int ii = 0; ii < results.size(); ii++) {
                                 DbClient c = results.get(ii);
 
-                                // Same client, so only send one to each site.
+                                // If duplicate client, do not send notification again.
                                 if (prevOrdId == c.organizationId) {
                                     continue;
                                 }
@@ -368,6 +372,58 @@ public class JailData {
                                     sendEmail(conn, mgr.email, data.effectiveDate,
                                               data.arrestingAgency, arrestedInfo,
                                               confidence);
+                                }
+
+                                // Populate ETO touchpoint.  One per client regardless
+                                // of which organization.
+                                boolean addTouchPoint = false;
+                                switch (confidence) {
+                                    case 90:
+                                        if (!c.firstName.equalsIgnoreCase(prevFirstName) ||
+                                            !c.lastName.equalsIgnoreCase(prevLastName) ||
+                                            c.dob.getTime() != prevDob) {
+                                            addTouchPoint = true;
+                                            prevFirstName = c.firstName;
+                                            prevLastName = c.lastName;
+                                            prevDob = c.dob.getTime();
+                                        }
+                                        break;
+                                    case 70:
+                                        if (!c.lastName.equalsIgnoreCase(prevLastName) ||
+                                            c.dob.getTime() != prevDob) {
+                                            addTouchPoint = true;
+                                            prevFirstName = "";
+                                            prevLastName = c.lastName;
+                                            prevDob = c.dob.getTime();
+                                        }
+                                        break;
+                                    case 60:
+                                        if (!c.firstName.equalsIgnoreCase(prevFirstName) ||
+                                            c.dob.getTime() != prevDob) {
+                                            addTouchPoint = true;
+                                            prevFirstName = c.firstName;
+                                            prevLastName = "";
+                                            prevDob = c.dob.getTime();
+                                        }
+                                        break;
+                                    case 50:
+                                        if (!c.firstName.equalsIgnoreCase(prevFirstName) ||
+                                            !c.lastName.equalsIgnoreCase(prevLastName)) {
+                                            addTouchPoint = true;
+                                            prevFirstName = c.firstName;
+                                            prevLastName = c.lastName;
+                                            prevDob = 0;
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                if (addTouchPoint && c.etoSubjectId != 0) {
+                                    TouchPointUtils.addArrestData(conn, c.organizationId,
+                                                                  c.etoSubjectId,
+                                                                  data.effectiveDate,
+                                                                  data.arrestingAgency,
+                                                                  arrestedInfo, confidence);
                                 }
                             }
                         }
