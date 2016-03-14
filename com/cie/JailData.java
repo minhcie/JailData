@@ -25,7 +25,6 @@ import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.apache.log4j.Logger;
 
 public class JailData {
-
     private static final Logger log = Logger.getLogger(JailData.class.getName());
 
     static void usage() {
@@ -68,8 +67,7 @@ public class JailData {
             stripper.addRegion("content", content);
 
             int pages = document.getNumberOfPages();
-            //for (int n = 1; n < pages; n++) { // Ignore first page.
-            for (int n = 24; n < 25; n++) { // Test data.
+            for (int n = 1; n < pages; n++) { // Ignore first page.
                 log.info("\n");
                 log.info("Page " + n + "\n");
                 PDPage page = document.getPage(n);
@@ -437,7 +435,7 @@ public class JailData {
         catch (IOException ioe) {
             log.error(ioe.getMessage());
             ioe.printStackTrace();
-        } 
+        }
         catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
@@ -514,7 +512,7 @@ public class JailData {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.debug", "true"); 
+        props.put("mail.debug", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -528,7 +526,7 @@ public class JailData {
         });
 
         // Enable the debug mode.
-        mailSession.setDebug(true);
+        //mailSession.setDebug(true);
 
         Message mail = new MimeMessage(mailSession);
 
@@ -542,7 +540,7 @@ public class JailData {
         // Email body.
         mail.setText(msg.toString());
 
-        // Send email message. 
+        // Send email message.
         log.info("Send notification email to: " + mgrEmailAddr);
         Transport.send(mail);
     }

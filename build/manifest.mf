@@ -13,4 +13,3 @@ Class-Path: .
             lib/mail-1.4.1.jar
             lib/pdfbox-2.0.0-RC2.jar
             lib/postgresql-9.4-1201.jdbc41.jar
-            
