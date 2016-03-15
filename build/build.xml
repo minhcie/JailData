@@ -8,7 +8,7 @@
    <property name="jarfile" value="${appname}.jar" />
 
    <target name="jar" depends="init,compile">
-      <jar jarfile="${jarfile}" 
+      <jar jarfile="${jarfile}"
            basedir="."
            manifest="BUILD/manifest.mf"
            excludes="*.*,**/*.java,**/BUILD/**" />
@@ -37,4 +37,3 @@
    </target>
 
 </project>
-
