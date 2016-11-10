@@ -216,6 +216,9 @@ public class TouchPointUtils {
             case 14: // Family Health Centers.
                 etoSiteId = 90;
                 break;
+            case 15: // 211 San Diego.
+                etoSiteId = 91;
+                break;
             default:
                 log.error("Invalid organization ID: " + orgId);
                 break;
@@ -255,6 +258,9 @@ public class TouchPointUtils {
                 break;
             case 14: // Family Health Centers.
                 etoProgramId = 789;
+                break;
+            case 15: // 211 San Diego.
+                etoProgramId = 791;
                 break;
             default:
                 log.error("Invalid organization ID: " + orgId);
