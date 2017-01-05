@@ -158,28 +158,30 @@ public class DbClient {
                 sb.append("lastName, suffix, dob, ssn, caseNumber, etoEnterpriseId, ");
                 sb.append("etoParticipantSiteId, etoSubjectId ");
                 sb.append("FROM client ");
+                sb.append("WHERE etoSubjectId > 0 ");
+                sb.append("  AND etoSubjectId IS NOT NULL ");
                 if (firstName != null && lastName != null && dob != null) {
-                    sb.append("WHERE firstName ILIKE '" + SqlString.encode(firstName) + "' ");
-                    sb.append("  AND lastName ILIKE '" + SqlString.encode(lastName) + "' ");
-                    sb.append("  AND dob = '" + sdf.format(dob) + "' ");
+                    sb.append("AND firstName ILIKE '" + SqlString.encode(firstName) + "' ");
+                    sb.append("AND lastName ILIKE '" + SqlString.encode(lastName) + "' ");
+                    sb.append("AND dob = '" + sdf.format(dob) + "' ");
                     sb.append("ORDER BY organizationId");
                     log.info("DbClient.findByNameDob(): name = " + firstName + " " + lastName + ", dob = " + sdf.format(dob));
                 }
                 else if (lastName != null && dob != null) {
-                    sb.append("WHERE lastName ILIKE '" + SqlString.encode(lastName) + "' ");
-                    sb.append("  AND dob = '" + sdf.format(dob) + "' ");
+                    sb.append("AND lastName ILIKE '" + SqlString.encode(lastName) + "' ");
+                    sb.append("AND dob = '" + sdf.format(dob) + "' ");
                     sb.append("ORDER BY organizationId");
                     log.info("DbClient.findByNameDob(): last name = " + lastName + ", dob = " + sdf.format(dob));
                 }
                 else if (firstName != null && dob != null) {
-                    sb.append("WHERE firstName ILIKE '" + SqlString.encode(firstName) + "' ");
-                    sb.append("  AND dob = '" + sdf.format(dob) + "' ");
+                    sb.append("AND firstName ILIKE '" + SqlString.encode(firstName) + "' ");
+                    sb.append("AND dob = '" + sdf.format(dob) + "' ");
                     sb.append("ORDER BY organizationId");
                     log.info("DbClient.findByNameDob(): first name = " + firstName + ", dob = " + sdf.format(dob));
                 }
                 else if (firstName != null && lastName != null) {
-                    sb.append("WHERE firstName ILIKE '" + SqlString.encode(firstName) + "' ");
-                    sb.append("  AND lastName ILIKE '" + SqlString.encode(lastName) + "' ");
+                    sb.append("AND firstName ILIKE '" + SqlString.encode(firstName) + "' ");
+                    sb.append("AND lastName ILIKE '" + SqlString.encode(lastName) + "' ");
                     sb.append("ORDER BY organizationId");
                     log.info("DbClient.findByNameDob(): name = " + firstName + " " + lastName);
                 }
